@@ -1,0 +1,33 @@
+﻿@model BibliotecaNacional.Models.Editorial
+
+@{
+    ViewData["Title"] = "Eliminar Editorial";
+}
+
+<div class="container mt-4">
+    <h3 class="text-danger">¿Estás seguro de que quieres eliminar esta editorial?</h3>
+    <hr />
+    
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sede)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sede)
+        </dd>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        
+        <input type="submit" value="Confirmar Eliminación" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </form>
+</div>

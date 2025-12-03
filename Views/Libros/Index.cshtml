@@ -1,0 +1,125 @@
+﻿@model IEnumerable<BibliotecaNacional.Models.Libro>
+
+@{
+    ViewData["Title"] = "Gestión de Libros";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary">Lista de Libros</h2>
+    <hr />
+
+    <p>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Crear Nuevo Libro
+        </a>
+    </p>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ISBN)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Titulo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sinopsis)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NPaginas)
+                </th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ISBN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </td>
+                    <td>
+                        @{
+                            // Define el límite de caracteres
+                            const int limite = 100;
+                            var sinopsisCompleta = item.Sinopsis ?? "(Sinopsis no disponible)";
+                            
+                            if (sinopsisCompleta.Length > limite)
+                            {
+                                // Muestra el texto truncado
+                                @sinopsisCompleta.Substring(0, limite)<span>...</span>
+                                
+                                // Botón que dispara el Modal, pasándole el ISBN del libro
+                                <a href="#" 
+                                   class="btn btn-sm btn-link p-0" 
+                                   data-bs-toggle="modal" 
+                                   data-bs-target="#sinopsisModal"
+                                   data-bs-title="@item.Titulo"
+                                   data-bs-content="@sinopsisCompleta">
+                                    Ver más
+                                </a>
+                            }
+                            else
+                            {
+                                @sinopsisCompleta // Muestra todo el texto si es corto
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NPaginas)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-isbn="@item.ISBN" class="btn btn-sm btn-warning">Editar</a> |
+                        <a asp-action="Delete" asp-route-isbn="@item.ISBN" class="btn btn-sm btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-lg mt-3 w-75">
+    Volver
+    </a>
+</div>
+<div class="modal fade" id="sinopsisModal" tabindex="-1" aria-labelledby="sinopsisModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sinopsisModalLabel">Sinopsis: <span id="modal-titulo"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-sinopsis-completa"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Se ejecuta cuando el Modal está a punto de mostrarse
+    var sinopsisModal = document.getElementById('sinopsisModal');
+    sinopsisModal.addEventListener('show.bs.modal', function (event) {
+        // Botón que disparó el Modal
+        var button = event.relatedTarget; 
+        
+        // Extrae los datos guardados en los atributos data-bs-*
+        var titulo = button.getAttribute('data-bs-title');
+        var sinopsis = button.getAttribute('data-bs-content');
+
+        // Referencia a los elementos dentro del Modal
+        var modalTitle = sinopsisModal.querySelector('#modal-titulo');
+        var modalBodyInput = sinopsisModal.querySelector('#modal-sinopsis-completa');
+
+        // Asigna los valores
+        modalTitle.textContent = titulo;
+        modalBodyInput.textContent = sinopsis;
+    });
+</script>
+}

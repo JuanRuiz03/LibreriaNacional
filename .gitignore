@@ -1,0 +1,15 @@
+# 1.Excluir carpetas generadas por la compilación
+[Bb]in/
+[Oo]bj/
+
+# 2.Excluir archivos de Visual Studio específicos del usuario
+*.suo
+*.user
+*.useros
+*.sln.docstates
+**/.vs/
+
+# Paquetes NuGet
+**/packages/
+# Directorios de restore de nuget
+.nuget/
